@@ -195,26 +195,3 @@ with open("tmp/secret/vk.json", "r") as v:
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
 SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
-
-
-"""# Authentication for VK:
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "social_core.backends.vk.VKOAuth2",
-)
-
-# SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ("social_core.backends.vk.VKOAuth2",)
-SOCIAL_AUTH_URL_NAMESPACE = "social"
-
-# You can save settings in file, but not in GIT!
-# SOCIAL_AUTH_VK_OAUTH2_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-# SOCIAL_AUTH_VK_OAUTH2_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-
-# Load settings from file
-import json
-
-with open("tmp/secret/vk.json", "r") as f:
-    VK = json.load(f)
-
-SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
-SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]"""
