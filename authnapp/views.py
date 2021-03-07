@@ -78,7 +78,13 @@ def send_verify_mail(user):
     \n{settings.DOMAIN_NAME}{verify_link}"
 
     print(f"from: {settings.EMAIL_HOST_USER}, to: {user.email}")
-    return send_mail(title, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False,)
+    return send_mail(
+        title,
+        message,
+        settings.EMAIL_HOST_USER,
+        [user.email],
+        fail_silently=False,
+    )
 
 
 def verify(request, email, activation_key):
@@ -88,7 +94,7 @@ def verify(request, email, activation_key):
             print(f"user {user} is activated")
             user.is_active = True
             user.save()
-            auth.login(request, user)
+            auth.login(request, user, backend="django.contrib.auth.backends.ModelBackend")
 
             return render(request, "authnapp/verification.html")
         print(f"error activation user: {user}")

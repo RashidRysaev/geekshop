@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "authnapp",
     "basketapp",
     "adminapp",
+    "social_django",
 ]
 
 # Auth model
@@ -165,3 +166,55 @@ EMAIL_HOST_PASSWORD = None
 # Email as files
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "tmp/email-messages/"
+
+# Authentication for Social Media:
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.facebook.FacebookOAuth2",
+    "social_core.backends.vk.VKOAuth2",
+)
+
+# SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ("social_core.backends.facebook.FacebookOAuth2",)
+SOCIAL_AUTH_URL_NAMESPACE = "social"
+
+# You can save settings in file, but not in GIT!
+# SOCIAL_AUTH_FACEBOOK_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+# SOCIAL_AUTH_FACEBOOK_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+# Load settings from file
+import json
+
+with open("tmp/secret/facebook.json", "r") as f:
+    FB = json.load(f)
+
+SOCIAL_AUTH_FACEBOOK_KEY = FB["SOCIAL_AUTH_FACEBOOK_KEY"]
+SOCIAL_AUTH_FACEBOOK_SECRET = FB["SOCIAL_AUTH_FACEBOOK_SECRET"]
+
+with open("tmp/secret/vk.json", "r") as v:
+    VK = json.load(v)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
+SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
+
+
+"""# Authentication for VK:
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.vk.VKOAuth2",
+)
+
+# SOCIAL_AUTH_AUTHENTICATION_BACKENDS = ("social_core.backends.vk.VKOAuth2",)
+SOCIAL_AUTH_URL_NAMESPACE = "social"
+
+# You can save settings in file, but not in GIT!
+# SOCIAL_AUTH_VK_OAUTH2_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+# SOCIAL_AUTH_VK_OAUTH2_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
+# Load settings from file
+import json
+
+with open("tmp/secret/vk.json", "r") as f:
+    VK = json.load(f)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
+SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]"""
