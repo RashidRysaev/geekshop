@@ -148,6 +148,9 @@ LOGIN_URL = "authnapp:login"
 
 DOMAIN_NAME = "http://localhost:8000"
 
+"""
+#    Email auth via build in tools:
+
 # Read about sending email:
 #   https://docs.djangoproject.com/en/2.2/topics/email/
 
@@ -169,6 +172,22 @@ EMAIL_HOST_PASSWORD = None
 # Email as files
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "tmp/email-messages/"
+"""
+
+#   Email auth via real Gmail account:
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "i.am.testing.my.feature@gmail.com"
+
+import json
+
+with open("tmp/secret/email.json", "r") as e:
+    EMAIL = json.load(e)
+
+EMAIL_HOST_PASSWORD = EMAIL["EMAIL_HOST_PASSWORD"]
 
 # Authentication for Social Media:
 AUTHENTICATION_BACKENDS = (
