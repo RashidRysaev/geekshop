@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "e6cg@9q*x6r^n1$%2)=n*5k0987$nn)#^m!^ueq2kg5jetqqxb"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.getenv("DJANGO_PRODUCTION", default=None) else True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -87,13 +87,23 @@ WSGI_APPLICATION = "geekshop.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
-
+else:
+    DATABASES = {
+        "default": {
+            "NAME": "geekshop",
+            "ENGINE": "django.db.backends.postgresql",
+            "USER": "django",
+            "PASSWORD": "geekshop",
+            "HOST": "localhost",
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -137,7 +147,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+# In common case STATIC_ROOT can not be in STATICFILES_DIRS
+if DEBUG:
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Media files
 MEDIA_URL = "/media/"
@@ -186,10 +200,13 @@ EMAIL_HOST_USER = "i.am.testing.my.feature@gmail.com"
 
 import json
 
-with open("tmp/secret/email.json", "r") as e:
-    EMAIL = json.load(e)
+try:
+    with open("tmp/secret/email.json", "r") as e:
+        EMAIL = json.load(e)
 
-EMAIL_HOST_PASSWORD = EMAIL["EMAIL_HOST_PASSWORD"]
+    EMAIL_HOST_PASSWORD = EMAIL["EMAIL_HOST_PASSWORD"]
+except Exception as exp:
+    print("Settings loading fail: %s" % (exp))
 
 # Authentication for Social Media:
 AUTHENTICATION_BACKENDS = (
@@ -208,17 +225,20 @@ SOCIAL_AUTH_URL_NAMESPACE = "social"
 # Load settings from file
 import json
 
-with open("tmp/secret/facebook.json", "r") as f:
-    FB = json.load(f)
+try:
+    with open("tmp/secret/facebook.json", "r") as f:
+        FB = json.load(f)
 
-SOCIAL_AUTH_FACEBOOK_KEY = FB["SOCIAL_AUTH_FACEBOOK_KEY"]
-SOCIAL_AUTH_FACEBOOK_SECRET = FB["SOCIAL_AUTH_FACEBOOK_SECRET"]
+    SOCIAL_AUTH_FACEBOOK_KEY = FB["SOCIAL_AUTH_FACEBOOK_KEY"]
+    SOCIAL_AUTH_FACEBOOK_SECRET = FB["SOCIAL_AUTH_FACEBOOK_SECRET"]
 
-with open("tmp/secret/vk.json", "r") as v:
-    VK = json.load(v)
+    with open("tmp/secret/vk.json", "r") as v:
+        VK = json.load(v)
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
-SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
+    SOCIAL_AUTH_VK_OAUTH2_KEY = VK["SOCIAL_AUTH_VK_OAUTH2_APPID"]
+    SOCIAL_AUTH_VK_OAUTH2_SECRET = VK["SOCIAL_AUTH_VK_OAUTH2_KEY"]
+except Exception as exp:
+    print("Settings loading fail: %s" % (exp))
 
 LOGIN_ERROR_URL = "/"
 
