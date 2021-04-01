@@ -167,10 +167,11 @@ def contact(request):
     content = {"title": title, "visit_date": visit_date, "locations": locations}
     return render(request, "mainapp/contact.html", content)
 
+
 from django.views.decorators.cache import cache_page
 
 
-@cache_page(600)
+# @cache_page(600)
 def contact(request):
     title = "о нас"
     visit_date = timezone.now()
